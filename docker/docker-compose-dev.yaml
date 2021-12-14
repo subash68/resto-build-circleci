@@ -1,0 +1,311 @@
+version: "3"
+services:
+  redis:
+    image: redis:latest
+    networks:
+      - ate_network
+    container_name: redis
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    volumes:
+      - ../redis_data:/data
+    tty: true
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  ate_menu_service:
+    image: ate_menu_service
+    networks:
+      - ate_network
+    container_name: ate_menu_service
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build: ../ate_menu_service/
+    volumes:
+      - ../ate_menu_service:/ate_menu_service
+    environment:
+      - "DB_HOSTNAME=ate_mysql_db:3306"
+    links:
+      - ate_mysql_db
+  #    command: "CompileDaemon --build='go build -o ate_menu_service' -command=./ate_menu_service"
+
+  ate_table_service:
+    image: ate_table_service
+    networks:
+      - ate_network
+    container_name: ate_table_service
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build: ../ate_table_service/
+    volumes:
+      - ../ate_table_service:/ate_table_service
+    environment:
+      - "DB_HOSTNAME=ate_mysql_db:3306"
+    links:
+      - ate_mysql_db
+    #    command: "CompileDaemon --build='go build -o ate_menu_service' -command=./ate_menu_service"
+
+
+  ate_reservation_service:
+    image: ate_reservation_service
+    networks:
+      - ate_network
+    container_name: ate_reservation_service
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build: ../ate_reservation_service/
+    volumes:
+      - ../ate_reservation_service:/ate_reservation_service
+    environment:
+      - "DB_HOSTNAME=ate_mysql_db:3306"
+    links:
+      - ate_mysql_db
+    #    command: "CompileDaemon --build='go build -o ate_menu_service' -command=./ate_menu_service"
+
+
+  ate_onboard_service:
+    image: ate_onboard_service
+    networks:
+      - ate_network
+    container_name: ate_onboard_service
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build: ../ate_onboard_service/
+    volumes:
+      - ../ate_onboard_service:/ate_onboard_service
+    environment:
+      - "DB_HOSTNAME=ate_mysql_db:3306"
+    links:
+      - ate_mysql_db
+    #    command: "CompileDaemon --build='go build -o ate_onboard_service' -command=./ate_onboard_service"
+    depends_on:
+      - ate_mysql_db
+      # condition: service_healthy
+
+  ate_token_service:
+    image: ate_token_service
+    networks:
+      - ate_network
+    container_name: ate_token_service
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build: ../ate_token_service/
+    volumes:
+      - ../ate_token_service:/ate_token_service
+    environment:
+      - "DB_HOSTNAME=ate_mysql_db:3306"
+      # - ../config-dev.json:/ate-token_service/configuration/config.json
+    # links:
+    #   - mongo
+    #    command: "CompileDaemon --build='go build -o ate_token_service' -command=./ate_token_service"
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  ate_category_service:
+    image: ate_category_service
+    networks:
+      - ate_network
+    container_name: ate_category_service
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build: ../ate_category_service/
+    volumes:
+      - ../ate_category_service:/ate_category_service
+    environment:
+      - "DB_HOSTNAME=ate_mysql_db:3306"
+    links:
+      - ate_mysql_db
+  #    command: "CompileDaemon --build='go build -o ate_category_service' -command=./ate_category_service"
+
+  ate_dispatcher_service:
+    image: ate_dispatcher_service
+    networks:
+      - ate_network
+    container_name: ate_dispatcher_service
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build: ../ate_dispatcher_service/
+    volumes:
+      - ../ate_dispatcher_service:/ate_dispatcher_service
+    environment:
+      - "DB_HOSTNAME=ate_mysql_db:3306"
+    links:
+      - ate_mysql_db
+  #    command: "CompileDaemon --build='go build -o ate_dispatcher_service' -command=./ate_dispatcher_service"
+
+  ate_cart_service:
+    image: ate_cart_service
+    networks:
+      - ate_network
+    container_name: ate_cart_service
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build: ../ate_cart_service/
+    volumes:
+      - ../ate_cart_service:/ate_cart_service
+    environment:
+      - "DB_HOSTNAME=ate_mysql_db:3306"
+    links:
+      - ate_mysql_db
+  #    command: "CompileDaemon --build='go build -o ate_cart_service' -command=./ate_cart_service"
+
+  ate_location_service:
+    image: ate_location_service
+    networks:
+      - ate_network
+    container_name: ate_location_service
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build: ../ate_location_service/
+    volumes:
+      - ../ate_location_service:/ate_location_service
+    environment:
+      - "DB_HOSTNAME=ate_mysql_db:3306"
+    links:
+      - ate_mysql_db
+    # command: "CompileDaemon --build='go build -o ate_location_service' -command=./ate_location_service"
+
+  ate_addon_service:
+    image: ate_addon_service
+    networks:
+      - ate_network
+    container_name: ate_addon_service
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build: ../ate_addon_service/
+    volumes:
+      - ../ate_addon_service:/ate_addon_service
+    environment:
+      - "DB_HOSTNAME=ate_mysql_db:3306"
+    links:
+      - ate_mysql_db
+  #    command: "CompileDaemon --build='go build -o ate_addon_service' -command=./ate_addon_service"
+
+  ate_order_service:
+    image: ate_order_service
+    networks:
+      - ate_network
+    container_name: ate_order_service
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build: ../ate_order_service/
+    volumes:
+      - ../ate_order_service:/ate_order_service
+    environment:
+      - "DB_HOSTNAME=ate_mysql_db:3306"
+    links:
+      - ate_mysql_db
+  #    command: "CompileDaemon --build='go build -o ate_menu_service' -command=./ate_menu_service"
+
+  ate_setting_service:
+    image: ate_setting_service
+    networks:
+      - ate_network
+    container_name: ate_setting_service
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build: ../ate_setting_service/
+    volumes:
+      - ../ate_setting_service:/ate_setting_service
+    environment:
+      - "DB_HOSTNAME=ate_mysql_db:3306"
+    links:
+      - ate_mysql_db
+  #     command: "CompileDaemon --build='go build -o ate_setting_service' -command=./ate_setting_service"
+
+  apigateway:
+    image: apigateway
+    networks:
+      - ate_network
+    container_name: apigateway
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build:
+      context: ../nginx/.
+    ports:
+      - "90:80"
+    links:
+      - ate_onboard_service
+    depends_on:
+      - ate_onboard_service
+
+  ate_mysql_db:
+    image: mysql:5.7
+    networks:
+      - ate_network
+    container_name: ate_mysql_db
+    restart: always
+    environment:
+      - MYSQL_DATABASE=ate_restaurant_schema # 'db'
+      # So you don't have to use root, but you can if you like
+      - MYSQL_USER=admin # 'user'
+      # You can use whatever password you like
+      - MYSQL_PASSWORD=Admin123# # 'password'
+      # Password for root access
+      - MYSQL_ROOT_PASSWORD=Admin123# # 'password'
+    ports:
+      # <Port exposed> : < MySQL Port running inside container>
+      - "3306:3306"
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+      # Where our data will be persisted
+    volumes:
+      # - my-db:/var/lib/mysql
+      - ./../schema/:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 4s
+      retries: 3
+
+volumes:
+  my-db:
+
+networks:
+  ate_network:
+    driver: bridge

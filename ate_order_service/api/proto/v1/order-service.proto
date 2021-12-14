@@ -1,0 +1,231 @@
+syntax = "proto3";
+option go_package = "order/";
+package order;
+
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+//definition for swagger support
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+  info: {
+    title: "ATE order Service";
+    version: "1.0";
+    contact: {
+      name: "ATE order service project";
+      url: "hyperl.io";
+      email: "subash@hyperl.io";
+    };
+  };
+  schemes: HTTP;
+  consumes: "application/json";
+  produces: "applications/json";
+  responses: {
+    key: "404";
+    value: {
+      description: "Returned when the resource does not exist.";
+      schema: {
+        json_schema: {
+          type: STRING;
+        }
+      }
+    }
+  }
+};
+
+message Cart {
+  int32 id = 1;
+  string address = 2;
+  repeated CartItem items = 3;
+  float shippingCost = 4;
+  float totalItemCost = 5;
+  float total = 6;
+  string type = 7;
+  string coupon = 8;
+  bool hasCoupon = 9;
+  string instructions = 10;
+  CartState  state = 11;
+  repeated CartComment comments = 12;
+}
+
+message CartItem {
+  int32 id = 1;
+  int32 itemId = 2;
+  int32 itemCount = 3;
+  float itemPrice = 4;
+}
+
+message CartState {
+  int64 id = 1;
+  string cartState = 2;
+}
+
+message CartComment {
+  int64 id = 1;
+  int64 userId = 2;
+  int64 cartId = 3;
+  string comment = 4;
+}
+
+message ResponseStatus {
+  bool status = 1;
+  string message = 2;
+}
+
+message RequestOrderRequest {
+  string api = 1;
+  int64 cartId = 2;
+}
+
+message RequestOrder {
+  string api = 1;
+  Cart cart = 2;
+  ResponseStatus error = 3;
+}
+
+message InPreparationRequest {
+  string api = 1;
+  int64 cartId = 2;
+}
+
+message InPreparation {
+  string api = 1;
+  Cart cart = 2;
+  ResponseStatus error = 3;
+}
+
+message EnRouteRequest {
+  string api = 1;
+  int64 cartId = 2;
+}
+
+message EnRoute {
+  string api = 1;
+  Cart cart = 2;
+  ResponseStatus error = 3;
+}
+
+message DeliveredRequest {
+  string api = 1;
+  int64 cartId = 2;
+}
+
+message Delivered {
+  string api = 1;
+  Cart cart = 2;
+  ResponseStatus error = 3;
+}
+
+message DisputedRequest {
+  string api = 1;
+  int64 cartId = 2;
+  string comment = 3;
+}
+
+message Disputed {
+  string api = 1;
+  Cart cart = 2;
+  ResponseStatus error = 3;
+}
+
+message RefundedRequest {
+  string api = 1;
+  int64 cartId = 2;
+}
+
+message Refunded {
+  string api = 1;
+  Cart cart = 2;
+  ResponseStatus error = 3;
+}
+
+message CanceledRequest {
+  string api = 1;
+  int64 cartId = 2;
+  string comment = 3;
+}
+
+message Canceled {
+  string api = 1;
+  Cart cart = 2;
+  ResponseStatus error = 3;
+}
+
+message FinishedRequest {
+  string api = 1;
+  int64 cartId = 2;
+  string comment = 3;
+}
+
+message Finished {
+  string api = 1;
+  Cart cart = 2;
+  ResponseStatus error = 3;
+}
+
+service OrderService {
+
+
+  // GET call to return all pending orders
+  //  rpc PendingOrders (PendingOrdersRequest) returns (PendingOrdersResponse) {
+  //    option (google.api.http) = {
+  //      get: "/pending"
+  //    };
+  //  }
+
+  // Request
+  rpc Request(RequestOrderRequest) returns (RequestOrder) {
+    option(google.api.http) = {
+      put:"/request/{cartId}",
+      body:"*"
+    };
+  }
+  // InPreparation
+  rpc Preparation(InPreparationRequest) returns (InPreparation) {
+    option(google.api.http) = {
+      put:"/preparation/{cartId}",
+      body:"*"
+    };
+  }
+  // EnRoute
+  rpc Route(EnRouteRequest) returns (EnRoute) {
+    option(google.api.http) = {
+      put:"/route/{cartId}",
+      body:"*"
+    };
+  }
+  // Delivered
+  rpc Deliver(DeliveredRequest) returns (Delivered) {
+    option(google.api.http) = {
+      put:"/delivered/{cartId}",
+      body:"*"
+    };
+  }
+  // Disputed
+  rpc Dispute(DisputedRequest) returns (Disputed) {
+    option(google.api.http) = {
+      put:"/disputed/{cartId}",
+      body:"*"
+    };
+  }
+  // Refunded
+  rpc Refund(RefundedRequest) returns (Refunded) {
+    option(google.api.http) = {
+      put:"/refunded/{cartId}",
+      body:"*"
+    };
+  }
+  // Canceled
+  rpc Cancel(CanceledRequest) returns (Canceled) {
+    option(google.api.http) = {
+      put:"/canceled/{cartId}",
+      body:"*"
+    };
+  }
+  // Finished
+  rpc Finish(FinishedRequest) returns (Finished) {
+    option(google.api.http) = {
+      put:"/finished/{cartId}",
+      body:"*"
+    };
+  }
+}

@@ -1,0 +1,209 @@
+syntax = "proto3";
+option go_package = "menu/";
+package menu;
+
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+//definition for swagger support
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+  info: {
+    title: "ATE menu Service";
+    version: "1.0";
+    contact: {
+      name: "ATE menu service project";
+      url: "hyperl.io";
+      email: "subash@hyperl.io";
+    };
+  };
+  schemes: HTTP;
+  consumes: "application/json";
+  produces: "applications/json";
+  responses: {
+    key: "404";
+    value: {
+      description: "Returned when the resource does not exist.";
+      schema: {
+        json_schema: {
+          type: STRING;
+        }
+      }
+    }
+  }
+};
+
+
+service MenuService {
+
+  // Read all menu
+  rpc ReadAll(ReadAllRequest) returns (ReadAllResponse) {
+    option (google.api.http) = {
+      get: "/all"
+    };
+  }
+
+  // Create new menu
+  rpc Create(CreateRequest) returns (CreateResponse) {
+    option (google.api.http) = {
+      post: "/create"
+      body: "*"
+    };
+  }
+
+  rpc Read(ReadRequest) returns (ReadResponse) {
+    option (google.api.http) = {
+      get: "/read/{id}"
+    };
+  }
+
+  rpc Update(UpdateRequest) returns (UpdateResponse) {
+    option (google.api.http) = {
+      put: "/update/{menu.id}",
+      body: "*"
+
+      additional_bindings {
+        patch: "/update/{menu.id}",
+        body: "*"
+      }
+    };
+  }
+
+  rpc Delete(DeleteRequest) returns (DeleteResponse) {
+    option (google.api.http) = {
+      delete: "/delete/{id}"
+    };
+  }
+
+  rpc CalculatePrice(CalculatePriceRequest) returns (CalculatePriceResponse) {
+    option (google.api.http) = {
+      post: "/price"
+      body: "*"
+    };
+  }
+}
+
+
+message ResponseStatus {
+  bool status = 1;
+  string message = 2;
+}
+
+// menu data model for sevices
+message Menu {
+  int64 id = 1;
+  string name = 2;
+  string incredients = 3;
+  //TODO: Category should be category object here...
+  int64 categoryId = 4;
+  bool status = 5;
+  int64 order = 6;
+
+  bool isFeatured = 7;
+  int32 position = 8;
+
+  float price = 9;
+  float discount = 10;
+  int32 discountType = 11;
+
+  int64 user = 12;
+
+  repeated Addons addons = 13;
+
+  string productImageUrl = 14;
+
+  //Add provision for image upload here...
+}
+
+message voidNoParams {}
+
+message Response {
+  bool isSuccess = 1;
+  string successMessage = 2;
+  string errorCode = 3;
+  string errorMessage = 4;
+  string errorDetail = 5;
+}
+
+
+// // Get details about a selected product from menu 
+// message GetProductRequest {
+//   string api = 1;
+//   int32 productId = 2;
+
+// }
+// message GetProductResponse {
+//   Response status = 1;
+// }
+
+message Addons {
+  int64 id = 1;
+  string name = 2;
+}
+
+message CreateRequest {
+  string api = 1;
+  Menu menu = 2;
+}
+
+message CreateResponse {
+  string api = 1;
+  int64 id = 2;
+  ResponseStatus error = 3;
+}
+
+message ReadAllRequest {
+  string api = 1;
+}
+
+message ReadAllResponse {
+  string api = 1;
+  repeated Menu menus = 2; // list of all categories related to current user
+  ResponseStatus error = 3;
+}
+
+message ReadRequest {
+  string api = 1;
+  string id = 2;
+}
+
+message ReadResponse {
+  string api = 1;
+  Menu menu = 2;
+  ResponseStatus error = 3;
+}
+
+message UpdateRequest {
+  string api = 1;
+  Menu menu = 2;
+}
+
+message UpdateResponse {
+  string api = 1;
+  int64 updated = 2; // number of entities updated successfully
+  ResponseStatus error = 3;
+}
+
+message DeleteRequest {
+  string api = 1;
+  int64 id = 2;
+}
+
+message DeleteResponse {
+  string api = 1;
+  int32 deleted = 2;
+  ResponseStatus error = 3;
+}
+
+message CalculatePriceRequest {
+  string api = 1;
+  int64 product = 2;
+}
+
+message CalculatePriceResponse {
+  string name            = 1;
+	float price            = 2;
+	float discount         = 3;
+	int32 discountType     = 4;
+	float discountedPrice = 5;
+  ResponseStatus status = 6;
+}

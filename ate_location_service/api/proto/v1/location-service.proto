@@ -1,0 +1,134 @@
+syntax = "proto3";
+option go_package = "location/";
+package location;
+
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+//definition for swagger support
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+  info: {
+    title: "ATE location Service";
+    version: "1.0";
+    contact: {
+      name: "ATE location service project";
+      url: "hyperl.io";
+      email: "subash@hyperl.io";
+    };
+  };
+  schemes: HTTP;
+  consumes: "application/json";
+  produces: "applications/json";
+  responses: {
+    key: "404";
+    value: {
+      description: "Returned when the resource does not exist.";
+      schema: {
+        json_schema: {
+          type: STRING;
+        }
+      }
+    }
+  }
+};
+
+message voidNoParams {}
+
+message Location {
+  int32 id = 1;
+  string unit = 2;
+  string building = 3;
+  string street = 4;
+  string city = 5;
+  string region = 6;
+  string country = 7;
+  string zipcode = 8;
+  bool isBilling = 9; 
+  string addressType = 10; // 1 - Home 2 - Work 3 - Delivery
+}
+
+message AddLocationRequest {
+  string api = 1;
+  Location address = 2;
+}
+
+message AddLocationResponse {
+  ResponseStatus status = 1;
+}
+
+message UpdateLocationRequest {
+  string api = 1;
+  Location address = 2;
+}
+message UpdateLocationResponse { 
+  ResponseStatus status = 1;
+}
+
+//send all locations
+message AllLocationResponse {
+  repeated Location locations = 1;
+  ResponseStatus status = 2;
+}
+
+message CurrentLocationRequest {
+  string api = 1;
+  Location current = 2;
+}
+
+message CurrentLocationResponse {
+  Location currentLocation = 1;
+  ResponseStatus status = 2;
+}
+
+message ResponseStatus {
+  bool isSuccess = 1;
+  string successMessage = 2;
+  string errorCode = 3;
+  string errorMessage = 4;
+  string errorDetail = 5;
+}
+
+service LocationService {
+  rpc AddLocation(AddLocationRequest) returns (AddLocationResponse) {
+    option (google.api.http) = {
+      post: "/add"
+      body: "*"
+    };
+  }
+
+  rpc UpdateLocation(UpdateLocationRequest) returns (UpdateLocationResponse) {
+    option (google.api.http) = { 
+      put: "/update"
+      body: "*"
+
+      additional_bindings {
+        patch: "/update"
+        body: "*"
+      }
+    };
+  }
+
+  rpc ViewLocations(voidNoParams) returns (AllLocationResponse) {
+    option (google.api.http) = {
+      get: "/all"
+    };
+  }
+
+  rpc UpdateCurrentLocation(CurrentLocationRequest) returns (CurrentLocationResponse) {
+    option (google.api.http) = {
+      put: "/change"
+      body: "*"
+
+      additional_bindings {
+        patch: "/change"
+        body: "*"
+      }
+    };
+  }
+  
+  rpc GetCurrentLocation(voidNoParams) returns (CurrentLocationResponse) {
+    option (google.api.http) = {
+      get: "/current"
+    };
+  }
+}

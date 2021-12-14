@@ -1,0 +1,171 @@
+version: "3"
+services:
+  redis:
+    image: redis:latest
+    networks:
+      - ate_network
+    container_name: redis
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    volumes:
+      - ../redis_data:/data
+    tty: true
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 1s
+      timeout: 3s
+      retries: 30
+
+  ate_menu_service:
+    image: ate_menu_service
+    networks:
+      - ate_network
+    container_name: ate_menu_service
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build:
+      context: ../ate_menu_service/.
+    volumes:
+      - ../ate_menu_service:/usr/app/
+      - /usr/app/node_modules
+    command: "npm start"
+
+  # ate_onboard_service:
+  #   image: ate_onboard_service
+  #   networks:
+  #     - ate_network
+  #   container_name: ate_onboard_service
+  #   build:
+  #     context: ../ate_onboard_service/.
+  #   restart: always
+  #   volumes:
+  #     - ../ate_onboard_service:/app/
+  #     - /app/node_modules/
+  #   env_file:
+  #     - ../ate_onboard_service/.env
+  #   environment:
+  #     - MONGO_HOST=mongodb://mongo/ate_onboard_service
+  #     - DEBUG=express-ate_onboard_service:*
+  #   links:
+  #     - mongo
+
+  ate_onboard_service:
+    image: ate_onboard_service
+    networks:
+      - ate_network
+    container_name: ate_onboard_service
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build:
+      context: ../ate_onboard_service/.
+    volumes:
+      - ../ate_onboard_service:/ate-onbard_service
+    links:
+      - mongo
+    command: "CompileDaemon --build='go build -o ate_onboard_service' -command=./ate_onboard_service"
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  ate_token_service:
+    image: ate_token_service
+    networks:
+      - ate_network
+    container_name: ate_token_service
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build:
+      context: ../ate_token_service/.
+    volumes:
+      - ../ate_token_service:/ate-token_service
+      # - ../config-dev.json:/ate-token_service/configuration/config.json
+    links:
+      - mongo
+    command: "CompileDaemon --build='go build -o ate_token_service' -command=./ate_token_service"
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  ate_setting_service:
+    image: ate_setting_service
+    networks:
+      - ate_network
+    container_name: ate_setting_service
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build:
+      context: ../ate_setting_service/.
+    volumes:
+      - ../ate_setting_service:/ate_token_service
+    links:
+      - mongo
+    command: "CompileDaemon --build='go build -o ate_setting_service' -command=./ate_setting_service"
+
+  mongo:
+    image: "mongo:3.4"
+    networks:
+      - ate_network
+    container_name: ate_restaurant_backend
+    restart: always
+    ports:
+      - "27017:27017"
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'db'
+      # So you don't have to use root, but you can if you like
+      MYSQL_USER: 'user'
+      # You can use whatever password you like
+      MYSQL_PASSWORD: 'password'
+      # Password for root access
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      # <Port exposed> : < MySQL Port running inside container>
+      - '3306:3306'
+    expose:
+      # Opens port 3306 on the container
+      - '3306'
+      # Where our data will be persisted
+    volumes:
+      - my-db:/var/lib/mysql
+
+  volumes:
+    my-db
+
+  apigateway:
+    image: apigateway
+    networks:
+      - ate_network
+    container_name: apigateway
+    restart: always
+    logging:
+      options:
+        max-file: "10"
+        max-size: 10m
+    build:
+      context: ../nginx/.
+    ports:
+      - "80:80"
+    links:
+      - ate_onboard_service
+    depends_on:
+      - ate_onboard_service
+
+networks:
+  ate_network:

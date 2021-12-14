@@ -1,0 +1,155 @@
+syntax = "proto3";
+option go_package = "cart/";
+package cart;
+
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+//definition for swagger support
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+  info: {
+    title: "ATE cart Service";
+    version: "1.0";
+    contact: {
+      name: "ATE cart service project";
+      url: "hyperl.io";
+      email: "subash@hyperl.io";
+    };
+  };
+  schemes: HTTP;
+  consumes: "application/json";
+  produces: "applications/json";
+  responses: {
+    key: "404";
+    value: {
+      description: "Returned when the resource does not exist.";
+      schema: {
+        json_schema: {
+          type: STRING;
+        }
+      }
+    }
+  }
+};
+
+message ResponseStatus {
+  bool isSuccess = 1;
+  string successMessage = 2;
+  string errorCode = 3;
+  string errorMessage = 4;
+  string errorDetail = 5;
+}
+
+message voidNoParams {}
+
+message Cart {
+  int32 id = 1;
+  string address = 2;
+  repeated CartItem items = 3;
+  float shippingCost = 4;
+  float totalItemCost = 5;
+  float total = 6;
+  string type = 7;
+  string coupon = 8;
+  bool hasCoupon = 9;
+  string instructions = 10;
+
+}
+
+message CartItem {
+  int32 id = 1;
+  int32 itemId = 2;
+  int32 itemCount = 3;
+  float itemPrice = 4;
+}
+
+message AddItemRequest {
+  string api = 1;
+  CartItem item = 2;
+}
+message AddItemResponse {
+  Cart cart = 1;
+  ResponseStatus status = 2;
+}
+
+message ReadCartRequest {
+  string api = 1;
+}
+message ReadCartResponse {
+  Cart cart = 1;
+  ResponseStatus status = 2;
+}
+
+message DeleteCartRequest {
+  string api = 1;
+}
+message DeleteCartResponse {
+  ResponseStatus status = 1;
+}
+
+message UpdateItemRequest {
+  string api = 1;
+  int32 itemId = 2;
+  int32 itemCount = 3;
+}
+message UpdateItemResponse {
+  ResponseStatus status = 1;
+}
+
+message RemoveItemRequest {
+  string api = 1;
+  int32 itemId = 2;
+}
+message RemoveItemResponse {
+  ResponseStatus status = 1;
+}
+
+service CartService {
+
+  // Add new item to cart 
+  rpc AddItem (AddItemRequest) returns (AddItemResponse) { 
+    option (google.api.http) = {
+      post: "/add"
+      body: "*"
+    };
+  }
+
+  //Send all objects - will send what parameters will be sent to server
+  /* 
+    sending item id to server
+  */  
+  rpc UpdateItem (UpdateItemRequest) returns (UpdateItemResponse) {
+    option (google.api.http) = {
+      put: "/update"
+      body: "*"
+
+      additional_bindings {
+        patch: "/update"
+        body: "*"
+      }
+    };
+  }
+
+  // Send the item id to remove the item from cart
+  // Send item id to server
+  rpc RemoveItem (RemoveItemRequest) returns (RemoveItemResponse) {
+    option (google.api.http) = {
+      put: "/remove"
+      body: "*"
+    };
+  }
+
+  //retruns current cart based on user id
+  rpc ReadCart(ReadCartRequest) returns (ReadCartResponse) {
+    option (google.api.http) = {
+      get: "/read"
+    };
+  }
+
+  // delete everthing in the cart for current user - remove entire cart
+  rpc DeleteCart (DeleteCartRequest) returns (DeleteCartResponse) {
+    option (google.api.http) = {
+      delete: "/delete"
+    };
+  }
+}

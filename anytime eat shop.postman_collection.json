@@ -1,0 +1,655 @@
+{
+	"info": {
+		"_postman_id": "ec5c7037-ca3c-4376-ba4d-cb838c4e72ad",
+		"name": "anytime eat shop",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "ate_menu_service",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJicnVjZS53YXluZUBnb3RoYW1jaXR5LmNvbSIsImZ1bGxuYW1lIjoiQnJ1Y2UgV2F5bmUiLCJ1c2VyVHlwZSI6MSwiZXhwIjoxNjMzNTU3ODkyfQ.HlH-2n-rNuOkT6L9AxMFD5ZzZYVdtD4SIowuvn_KJrI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api\": \"v1\",\n    \"menu\": {\n        \"name\": \"Pizza one\",\n        \"incredients\": \"pan and pizza cream\",\n        \"categoryid\": 4,\n        \"isfeatured\": false,\n        \"price\": 6.25,\n        \"discount\": 0.15,\n        \"discountType\": 1,\n        \"addons\": [{\n            \"id\": 1\n        }]\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{address}}:{{port}}/{{menu}}/create",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{menu}}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJicnVjZS53YXluZUBnb3RoYW1jaXR5LmNvbSIsImZ1bGxuYW1lIjoiQnJ1Y2UgV2F5bmUiLCJ1c2VyVHlwZSI6MSwiZXhwIjoxNjMzNTU3ODkyfQ.HlH-2n-rNuOkT6L9AxMFD5ZzZYVdtD4SIowuvn_KJrI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:{{port}}/{{menu}}/all",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{menu}}",
+								"all"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ate_token_service",
+			"item": [
+				{
+					"name": "verify token",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"[]"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJlbWFpbCI6ImFudG9ueS5zdGFya0Bhbnl0aW1lZWF0Lml0IiwiZXhwIjoxNjMwMjI2NzkwLCJmdWxsbmFtZSI6IkFudG9ueSBTdGFyayIsImlkIjoiNjEyYjE3NmNlYzcxYTQwMDJhNDYzNWVkIiwic3RhdHVzIjoidHJ1ZSJ9.r05tdeNiD1qPpW9UoRNxWcXEO0irQfix8LddytiJl-c\",\n    \"id\": \"some user id\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{address}}:{{port}}/t/v1/validate",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"t",
+								"v1",
+								"validate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SERVICE PING",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http:///v1/validate",
+							"protocol": "http",
+							"path": [
+								"v1",
+								"validate"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ate_setting_service",
+			"item": [
+				{
+					"name": "Service Ping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:{{port}}/s/",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"s",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ate_onboard_service",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api\": \"v1\",\n    \"email\": \"bruce.wayne@gothamcity.com\",\n    \"password\": \"testpassword\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{address}}:{{port}}/o/v1/login",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"o",
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api\": \"v1\",\n    \"user\": {\n        \"fullname\": \"Bruce Wayne\",\n        \"email\": \"bruce.wayne@gothamcity.com\",\n        \"password\": \"testpassword\",\n        \"confirmPassword\": \"testpassword\",\n        \"phone\": \"+ 65 123455672\",\n        \"type\": 1\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{address}}:{{port}}/o/v1/register",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"o",
+								"v1",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ate_category_service",
+			"item": [
+				{
+					"name": "Get",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJicnVjZS53YXluZUBnb3RoYW1jaXR5LmNvbSIsImZ1bGxuYW1lIjoiQnJ1Y2UgV2F5bmUiLCJ1c2VyVHlwZSI6MSwiZXhwIjoxNjMzNTU2MzcwfQ.NzU9kDg3bopmzo5MxqDwZb495yHWpKjQL04HcgM7HOE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api\": \"v1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{address}}:{{port}}/{{category}}/read/1",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{category}}",
+								"read",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJicnVjZS53YXluZUBnb3RoYW1jaXR5LmNvbSIsImZ1bGxuYW1lIjoiQnJ1Y2UgV2F5bmUiLCJ1c2VyVHlwZSI6MSwiZXhwIjoxNjMzNTU2MzcwfQ.NzU9kDg3bopmzo5MxqDwZb495yHWpKjQL04HcgM7HOE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api\": \"v1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{address}}:{{port}}/{{category}}/all",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{category}}",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJicnVjZS53YXluZUBnb3RoYW1jaXR5LmNvbSIsImZ1bGxuYW1lIjoiQnJ1Y2UgV2F5bmUiLCJ1c2VyVHlwZSI6MSwiZXhwIjoxNjMyNDM5NTA4fQ.6OcjMLYcNGvpb-QYcPBxeSjd-OT3_V8rVcsbmhUpu14",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\n{\n    \"api\": \"v1\",\n    \"category\" : {\n        \"name\": \"category name one\",\n        \"description\": \"category description\",\n        \"order\": 1,\n        \"status\": true\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{address}}:{{port}}/{{category}}/create",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{category}}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:{{port}}/{{category}}/update/1",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{category}}",
+								"update",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJicnVjZS53YXluZUBnb3RoYW1jaXR5LmNvbSIsImZ1bGxuYW1lIjoiQnJ1Y2UgV2F5bmUiLCJ1c2VyVHlwZSI6MSwiZXhwIjoxNjMyNDM5NTA4fQ.6OcjMLYcNGvpb-QYcPBxeSjd-OT3_V8rVcsbmhUpu14",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api\": \"v1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{address}}:{{port}}/{{category}}/delete/3",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{category}}",
+								"delete",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "ate_addons_service",
+			"item": [
+				{
+					"name": "Get All",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJicnVjZS53YXluZUBnb3RoYW1jaXR5LmNvbSIsImZ1bGxuYW1lIjoiQnJ1Y2UgV2F5bmUiLCJ1c2VyVHlwZSI6MSwiZXhwIjoxNjMzNTU2MzcwfQ.NzU9kDg3bopmzo5MxqDwZb495yHWpKjQL04HcgM7HOE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:{{port}}/{{addon}}/all",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{addon}}",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJicnVjZS53YXluZUBnb3RoYW1jaXR5LmNvbSIsImZ1bGxuYW1lIjoiQnJ1Y2UgV2F5bmUiLCJ1c2VyVHlwZSI6MSwiZXhwIjoxNjMzNTU2MzcwfQ.NzU9kDg3bopmzo5MxqDwZb495yHWpKjQL04HcgM7HOE",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:{{port}}/{{addon}}/read/1",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{addon}}",
+								"read",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJicnVjZS53YXluZUBnb3RoYW1jaXR5LmNvbSIsImZ1bGxuYW1lIjoiQnJ1Y2UgV2F5bmUiLCJ1c2VyVHlwZSI6MSwiZXhwIjoxNjMzNTU3ODkyfQ.HlH-2n-rNuOkT6L9AxMFD5ZzZYVdtD4SIowuvn_KJrI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api\": \"v1\",\n    \"addon\": {\n        \"name\": \"Tomato\",\n        \"price\": 0.45\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{address}}:{{port}}/{{addon}}/create",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{addon}}",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJicnVjZS53YXluZUBnb3RoYW1jaXR5LmNvbSIsImZ1bGxuYW1lIjoiQnJ1Y2UgV2F5bmUiLCJ1c2VyVHlwZSI6MSwiZXhwIjoxNjMzNTU3ODkyfQ.HlH-2n-rNuOkT6L9AxMFD5ZzZYVdtD4SIowuvn_KJrI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"api\": \"v1\",\n    \"addon\": {\n        \"name\": \"Red Tomato\",\n        \"price\": 0.55\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{address}}:{{port}}/{{addon}}/update/1",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{addon}}",
+								"update",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJicnVjZS53YXluZUBnb3RoYW1jaXR5LmNvbSIsImZ1bGxuYW1lIjoiQnJ1Y2UgV2F5bmUiLCJ1c2VyVHlwZSI6MSwiZXhwIjoxNjMzNTU3ODkyfQ.HlH-2n-rNuOkT6L9AxMFD5ZzZYVdtD4SIowuvn_KJrI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:{{port}}/{{addon}}/delete/1",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{addon}}",
+								"delete",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get addons for product",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJicnVjZS53YXluZUBnb3RoYW1jaXR5LmNvbSIsImZ1bGxuYW1lIjoiQnJ1Y2UgV2F5bmUiLCJ1c2VyVHlwZSI6MSwiZXhwIjoxNjMzNTU3ODkyfQ.HlH-2n-rNuOkT6L9AxMFD5ZzZYVdtD4SIowuvn_KJrI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{address}}:{{port}}/{{addon}}/product/1",
+							"protocol": "http",
+							"host": [
+								"{{address}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"{{addon}}",
+								"product",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

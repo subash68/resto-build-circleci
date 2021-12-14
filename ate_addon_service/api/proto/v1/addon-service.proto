@@ -1,0 +1,162 @@
+syntax = "proto3";
+option go_package = "addon/";
+package addon;
+
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+//definition for swagger support
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+  info: {
+    title: "ATE Addon Service";
+    version: "1.0";
+    contact: {
+      name: "ATE addon service project";
+      url: "hyperl.io";
+      email: "subash@hyperl.io";
+    };
+  };
+  schemes: HTTP;
+  consumes: "application/json";
+  produces: "applications/json";
+  responses: {
+    key: "404";
+    value: {
+      description: "Returned when the resource does not exist.";
+      schema: {
+        json_schema: {
+          type: STRING;
+        }
+      }
+    }
+  }
+};
+
+
+service AddonService {
+
+  rpc ReadAll(ReadAllRequest) returns (ReadAllResponse) {
+    option (google.api.http) = {
+      get: "/all"
+    };
+  }
+
+  rpc Create(CreateRequest) returns (CreateResponse) {
+    option (google.api.http) = {
+      post: "/create"
+      body: "*"
+    };
+  }
+
+  rpc Read(ReadRequest) returns (ReadResponse) {
+    option (google.api.http) = {
+      get: "/read/{id}"
+    };
+  }
+
+  rpc ReadByProduct(ReadByProductRequest) returns (ReadByProductResponse) {
+    option (google.api.http) = {
+      get: "/product/{id}"
+    };
+  }
+
+  rpc Update(UpdateRequest) returns (UpdateResponse) {
+    option (google.api.http) = {
+      put: "/update/{addon.id}",
+      body: "*"
+
+      additional_bindings {
+        patch: "/update/{addon.id}",
+        body: "*"
+      }
+    };
+  }
+
+  rpc Delete(DeleteRequest) returns (DeleteResponse) {
+    option (google.api.http) = {
+      delete: "/delete/{id}"
+    };
+  }
+}
+
+//TODO: add status and message to all api calls 
+message ResponseStatus {
+  bool status = 1;
+  string message = 2;
+}
+
+message Addon {
+  int64 id = 1;
+  string name = 2;
+  float price = 5;
+  int64 user = 6;
+}
+
+message voidNoParams {}
+
+message CreateRequest {
+  string api = 1;
+  Addon addon = 2;
+}
+
+message CreateResponse {
+  string api = 1;
+  int64 id = 2;
+  ResponseStatus error = 3;
+}
+
+message ReadAllRequest {
+  string api = 1;
+}
+
+message ReadAllResponse {
+  string api = 1;
+  repeated Addon addons = 2; // list of all categories related to current user
+  ResponseStatus error = 3;
+}
+
+message ReadRequest {
+  string api = 1;
+  string id = 2;
+}
+
+message ReadResponse {
+  string api = 1;
+  Addon addon = 2;
+  ResponseStatus error = 3;
+}
+
+message UpdateRequest {
+  string api = 1;
+  Addon addon = 2;
+}
+
+message UpdateResponse {
+  string api = 1;
+  int64 updated = 2; // number of entities updated successfully
+  ResponseStatus error = 3;
+}
+
+message DeleteRequest {
+  string api = 1;
+  int64 id = 2;
+}
+
+message DeleteResponse {
+  string api = 1;
+  int32 deleted = 2;
+  ResponseStatus error = 3;
+}
+
+// By product messages
+message ReadByProductRequest {
+  string api = 1;
+  string id = 2;
+}
+
+message ReadByProductResponse {
+  string api = 1;
+  repeated Addon addons = 2;
+  ResponseStatus error = 3;
+
+}

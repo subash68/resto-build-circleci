@@ -1,0 +1,180 @@
+syntax = "proto3";
+option go_package = "setting/;setting";
+package setting;
+
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+//definition for swagger support
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+  info: {
+    title: "ATE setting Service";
+    version: "1.0";
+    contact: {
+      name: "ATE setting service project";
+      url: "hyperl.io";
+      email: "subash@hyperl.io";
+    };
+  };
+  schemes: HTTP;
+  consumes: "application/json";
+  produces: "applications/json";
+  responses: {
+    key: "404";
+    value: {
+      description: "Returned when the resource does not exist.";
+      schema: {
+        json_schema: {
+          type: STRING;
+        }
+      }
+    }
+  }
+};
+
+
+service SettingService {
+
+  // Read all setting
+  rpc ReadAll(ReadAllRequest) returns (ReadAllResponse) {
+    option (google.api.http) = {
+      get: "/all"
+    };
+  }
+
+  // Create new setting
+  rpc Create(CreateRequest) returns (CreateResponse) {
+    option (google.api.http) = {
+      post: "/create"
+      body: "*"
+    };
+  }
+
+  rpc Read(ReadRequest) returns (ReadResponse) {
+    option (google.api.http) = {
+      get: "/read/{id}"
+    };
+  }
+
+  rpc Update(UpdateRequest) returns (UpdateResponse) {
+    option (google.api.http) = {
+      put: "/update/{setting.id}",
+      body: "*"
+
+      additional_bindings {
+        patch: "/update/{setting.id}",
+        body: "*"
+      }
+    };
+  }
+
+  rpc Delete(DeleteRequest) returns (DeleteResponse) {
+    option (google.api.http) = {
+      delete: "/delete/{id}"
+    };
+  }
+}
+
+message ResponseStatus {
+  bool status = 1;
+  string message = 2;
+}
+
+// setting data model for sevices
+message Setting {
+  int64 id = 1;
+  string fullname = 2;
+  string email = 3;
+  string password = 4;
+  string phone = 5;
+  int64 type = 6;
+  string cuisine = 7;
+  int64 status = 8;
+  int64 everyday = 9;
+  string profileImageUrl = 10;
+  string shopLogoUrl = 11;
+  string shopBannerUrl = 12;
+  int64 isVeg = 13;
+  int64 mealService = 14;
+  int64 partyCatering = 15;
+  int64 deliveryTakeAway = 16;
+  int64 delivery = 17;
+  int64 freeDelivery = 18;
+  int64 offerType = 19;
+  int64 offer = 20;
+  int64 offerAmount = 21;
+  int64 maxDeliveryTime = 22;
+  string description = 23;
+  string location = 24;
+  string locLongitude = 25;
+  string locLatitude = 26;
+  repeated OpenTime opening = 27;
+
+  //Add provision for image upload here...
+}
+
+message OpenTime {
+  int64 id = 1;
+  string dayName = 2;
+  string openFrom = 3;
+  string openTo = 4;
+}
+
+message UserType {
+  int64 id = 1;
+  string name = 2;
+}
+
+message CreateRequest {
+  string api = 1;
+  Setting setting = 2;
+}
+
+message CreateResponse {
+  string api = 1;
+  int64 id = 2;
+  ResponseStatus error = 3;
+}
+
+message ReadAllRequest {
+  string api = 1;
+}
+
+message ReadAllResponse {
+  string api = 1;
+  repeated Setting settings = 2; // list of all categories related to current user
+  ResponseStatus error = 3;
+}
+
+message ReadRequest {
+  string api = 1;
+  string id = 2;
+}
+
+message ReadResponse {
+  string api = 1;
+  Setting setting = 2;
+  ResponseStatus error = 3;
+}
+
+message UpdateRequest {
+  string api = 1;
+  Setting setting = 2;
+}
+
+message UpdateResponse {
+  string api = 1;
+  int64 updated = 2; // number of entities updated successfully
+  ResponseStatus error = 3;
+}
+
+message DeleteRequest {
+  string api = 1;
+  int64 id = 2;
+}
+
+message DeleteResponse {
+  string api = 1;
+  int32 deleted = 2;
+  ResponseStatus error = 3;
+}

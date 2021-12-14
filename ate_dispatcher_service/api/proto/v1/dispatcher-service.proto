@@ -1,0 +1,102 @@
+syntax = "proto3";
+option go_package = "dispatcher/";
+package dispatcher;
+
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+//definition for swagger support
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+  info: {
+    title: "ATE dispatcher Service";
+    version: "1.0";
+    contact: {
+      name: "ATE dispatcher service project";
+      url: "hyperl.io";
+      email: "subash@hyperl.io";
+    };
+  };
+  schemes: HTTP;
+  consumes: "application/json";
+  produces: "applications/json";
+  responses: {
+    key: "404";
+    value: {
+      description: "Returned when the resource does not exist.";
+      schema: {
+        json_schema: {
+          type: STRING;
+        }
+      }
+    }
+  }
+};
+
+
+service DispatcherService {
+
+
+  // GET call to return all pending orders
+  rpc PendingOrders (PendingOrdersRequest) returns (PendingOrdersResponse) {
+    option (google.api.http) = {
+      get: "/pending"
+    };
+  }
+
+  
+
+  // // Read all dispatcher
+  // rpc ReadAll(ReadAllRequest) returns (ReadAllResponse) {
+  //   option (google.api.http) = {
+  //     get: "/all"
+  //   };
+  // }
+
+  // // Create new dispatcher
+  // rpc Create(CreateRequest) returns (CreateResponse) {
+  //   option (google.api.http) = {
+  //     post: "/create"
+  //     body: "*"
+  //   };
+  // }
+
+  // rpc Read(ReadRequest) returns (ReadResponse) {
+  //   option (google.api.http) = {
+  //     get: "/read/{id}"
+  //   };
+  // }
+
+  // rpc Update(UpdateRequest) returns (UpdateResponse) {
+  //   option (google.api.http) = {
+  //     put: "/update/{dispatcher.id}",
+  //     body: "*"
+
+  //     additional_bindings {
+  //       patch: "/update/{dispatcher.id}",
+  //       body: "*"
+  //     }
+  //   };
+  // }
+
+  // rpc Delete(DeleteRequest) returns (DeleteResponse) {
+  //   option (google.api.http) = {
+  //     delete: "/delete/{id}"
+  //   };
+  // }
+}
+
+message ResponseStatus {
+  bool status = 1;
+  string message = 2;
+}
+
+// THIS SHOULD MATCH THE order service
+message Dispatcher {
+  int64 id = 1;
+}
+
+message voidNoParams {}
+
+// Pending orders request/response
+message PendingOrdersRequest {}
+message PendingOrdersResponse {}
